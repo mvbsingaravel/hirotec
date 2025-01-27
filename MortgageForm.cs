@@ -37,20 +37,66 @@ namespace WinFormsApp1
             {
                 if (String.IsNullOrEmpty(mortgageTypeComboBox.Text))
                 {
-                    throw new Exception("Please select mortgage type!");
+                    MessageBox.Show("Please select mortgage type!", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 if (String.IsNullOrEmpty(loanAmountTextBox.Text))
                 {
-                    throw new Exception("Please provide loan amount!");
+                    MessageBox.Show("Please provide loan amount!", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (!decimal.TryParse(loanAmountTextBox.Text, out decimal loanAmount_chk))
+                {
+                    MessageBox.Show("Please provide a valid Loan Amount in numbers.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (loanAmount_chk <= 0)
+                {
+                    MessageBox.Show("Loan Amount must be a positive value.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 if (String.IsNullOrEmpty(interestRateTextBox.Text))
                 {
-                    throw new Exception("Please provide Rate of interest!");
+                    MessageBox.Show("Please provide Rate of interest!", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (!decimal.TryParse(interestRateTextBox.Text, out decimal interestRate_Chk))
+                {
+                    MessageBox.Show("Please provide a valid Rate of Interest in numbers.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (interestRate_Chk <= 0) 
+                {
+                    MessageBox.Show("Rate of Interest must be a non-negative value.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (interestRate_Chk > 100) 
+                {
+                    MessageBox.Show("Rate of Interest seems unusually high. Please verify.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 if (String.IsNullOrEmpty(loanDurationTextBox.Text))
                 {
-                    throw new Exception("Please provide loan duration!");
+                    MessageBox.Show("Please provide loan duration!", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                if (!int.TryParse(loanDurationTextBox.Text, out int loanDuration_chk))
+                {
+                    MessageBox.Show("Please provide a valid Loan Duration in whole numbers (years).", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (loanDuration_chk <= 0)
+                {
+                    MessageBox.Show("Loan Duration must be a positive number of years.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;     
+                }
+                if (loanDuration_chk > 50) 
+                {
+                    MessageBox.Show("Loan Duration is too long. Please enter a duration within a reasonable range.", "Morgage Calculator", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 var loanAmount = decimal.Parse(loanAmountTextBox.Text);
                 var interestRate = decimal.Parse(interestRateTextBox.Text);
                 var loanDuration = int.Parse(loanDurationTextBox.Text);
@@ -65,6 +111,10 @@ namespace WinFormsApp1
 
                     totalRepaymentLabel.Text = $"Total Repayment: {totalRepayment:C}";
                     interestPaidLabel.Text = $"Interest Paid: {interestPaid:C}";
+                }
+                else
+                {
+                    throw new Exception($"Mortgage type '{mortgageTypeComboBox.SelectedItem}' not found in the system.");
                 }
             }
             catch (Exception ex)
